@@ -1,0 +1,8 @@
+window.config = {
+    auth0: {
+      domain: '${AUTH0_DOMAIN}',
+      clientID: '${AUTH0_CLIENT_ID}',
+      redirectUri: '${AUTH0_REDIRECT_URI_BASE}/callback',
+      audience: '${AUTH0_AUDIENCE}'
+    }
+};
