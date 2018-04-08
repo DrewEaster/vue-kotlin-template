@@ -1,11 +1,12 @@
 import auth0 from 'auth0-js'
 import Vue from 'vue'
+import auth0Config from 'config/Auth0Config'
 
 let webAuth = new auth0.WebAuth({
-  domain: window.config.auth0.domain,
-  clientID: window.config.auth0.clientID,
-  redirectUri: window.config.auth0.redirectUri,
-  audience: window.config.auth0.audience, 
+  domain: auth0Config.domain(),
+  clientID: auth0Config.clientID(),
+  redirectUri: auth0Config.redirectUri(),
+  audience: auth0Config.audience(), 
   responseType: 'token id_token',
   scope: 'openid profile'
 })
@@ -56,7 +57,6 @@ let auth = new Vue({
         localStorage.removeItem('id_token')
         localStorage.removeItem('expires_at')
         localStorage.removeItem('user')
-        webAuth.authorize()
       })
     },
     isAuthenticated() {
@@ -77,7 +77,6 @@ let auth = new Vue({
             this.logout()
             reject(err)
           }
-
         })
       })
     }

@@ -1,8 +1,11 @@
 window.config = {
+    api: {
+      uriBase: '${API_URI_BASE}',
+    },
     auth0: {
       domain: '${AUTH0_DOMAIN}',
       clientID: '${AUTH0_CLIENT_ID}',
-      redirectUri: '${AUTH0_REDIRECT_URI_BASE}/callback',
+      redirectUriBase: '${AUTH0_REDIRECT_URI_BASE}',
       audience: '${AUTH0_AUDIENCE}'
     }
 };
