@@ -1,8 +1,8 @@
 version: '3'
 services:
-  backend:
+  api-server:
     build:
-      context: backend/
+      context: api-server/
     ports:
       - "3333:3333"
       - "5005:5005"
@@ -12,23 +12,23 @@ services:
       - JWT_AUDIENCE=http://startupbattles.com
       - JWT_REALM=startup_battles
     volumes:
-      - ./backend:/app
+      - ./api-server:/app
       - /app/.gradle
       - gradle-cache:/root/.gradle/caches/modules-2/files-2.1/
     restart: always
-  frontend:
+  front-end:
     build:
-      context: frontend/
+      context: front-end/
     command: bash -c "envsubst < /app/src/config/application.conf.js.template > /app/public/config/application.conf.js && yarn install && yarn serve"
     ports:
       - "8080:8080"
     environment:
       - AUTH0_DOMAIN=dreweaster.eu.auth0.com
-      - AUTH0_CLIENT_ID=
+      - AUTH0_CLIENT_ID=RW3cQ2q2b2t4m4ivaPfggqN6O5sfyg1I
       - AUTH0_REDIRECT_URI_BASE=http://localhost:8080
       - AUTH0_AUDIENCE=http://startupbattles.com
     volumes:
-      - ./frontend:/app
+      - ./front-end:/app
       - /app/node_modules
       - /app/public/config
 volumes:
