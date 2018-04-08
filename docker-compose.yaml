@@ -6,11 +6,10 @@ services:
     ports:
       - "3333:3333"
       - "5005:5005"
+    env_file:
+      - auth0.env
     environment:
       - CORS_ALLOWED_HOST=localhost:8080
-      - JWT_DOMAIN=https://dreweaster.eu.auth0.com/
-      - JWT_AUDIENCE=http://startupbattles.com
-      - JWT_REALM=startup_battles
     volumes:
       - ./api-server:/app
       - /app/.gradle
@@ -22,12 +21,11 @@ services:
     command: bash -c "envsubst < /app/src/config/application.conf.js.template > /app/public/config/application.conf.js && yarn install && yarn serve"
     ports:
       - "8080:8080"
+    env_file:
+      - auth0.env
     environment:
       - API_URI_BASE=http://localhost:3333
-      - AUTH0_DOMAIN=dreweaster.eu.auth0.com
-      - AUTH0_CLIENT_ID=RW3cQ2q2b2t4m4ivaPfggqN6O5sfyg1I
       - AUTH0_REDIRECT_URI_BASE=http://localhost:8080
-      - AUTH0_AUDIENCE=http://startupbattles.com
     volumes:
       - ./front-end:/app
       - /app/node_modules

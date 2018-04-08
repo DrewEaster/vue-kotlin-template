@@ -16,7 +16,7 @@ interface JwtConfig {
 @Singleton
 class KtorJwtConfig @Inject constructor (config: ApplicationConfig) : JwtConfig {
 
-    override val issuer = config.property("jwt.domain").getString()
+    override val issuer = "https://${config.property("jwt.domain").getString()}/"
 
     override val audience = config.property("jwt.audience").getString()
 
