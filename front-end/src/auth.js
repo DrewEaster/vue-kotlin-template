@@ -1,6 +1,6 @@
 import auth0 from 'auth0-js'
 import Vue from 'vue'
-import auth0Config from 'config/Auth0Config'
+import auth0Config from './config/Auth0Config'
 
 let webAuth = new auth0.WebAuth({
   domain: auth0Config.domain(),
@@ -48,7 +48,10 @@ let auth = new Vue({
     }
   },
   methods: {
-    login() {
+    login(redirectRouteName) {
+      if(redirectRouteName) {
+        localStorage.setItem('redirect_route_name', redirectRouteName)
+      }
       webAuth.authorize()
     },
     logout() {
@@ -57,22 +60,25 @@ let auth = new Vue({
         localStorage.removeItem('id_token')
         localStorage.removeItem('expires_at')
         localStorage.removeItem('user')
+        resolve()
       })
     },
     isAuthenticated() {
       return new Date().getTime() < this.expiresAt
     },
     handleAuthentication() {
-      return new Promise((resolve, reject) => {  
+      return new Promise((resolve, reject) => {
+        
+        let redirectRouteName = localStorage.getItem('redirect_route_name')
+        localStorage.removeItem('redirect_route_name')
+        
         webAuth.parseHash((err, authResult) => {
-
           if (authResult && authResult.accessToken && authResult.idToken) {
             this.expiresAt = authResult.expiresIn
             this.accessToken = authResult.accessToken
             this.token = authResult.idToken
             this.user = authResult.idTokenPayload
-            resolve()
-
+            resolve(redirectRouteName)
           } else if (err) {
             this.logout()
             reject(err)

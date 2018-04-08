@@ -1,10 +1,10 @@
 class ApiConfig {
     
     apiUriBase() {
-        return window.config.api.uriBase;
+        return window.config.api.uriBase
     }
 }
 
-const apiConfig = new ApiConfig();
+const apiConfig = new ApiConfig()
 
-export default apiConfig;
+export default apiConfig

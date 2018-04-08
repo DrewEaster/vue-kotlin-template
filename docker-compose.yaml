@@ -18,7 +18,7 @@ services:
   front-end:
     build:
       context: front-end/
-    command: bash -c "envsubst < /app/src/config/application.conf.js.template > /app/public/config/application.conf.js && yarn install && yarn serve"
+    command: bash -c "envsubst < /app/src/config/template/application.conf.js.template > /app/public/config/application.conf.js && yarn install && yarn serve"
     ports:
       - "8080:8080"
     env_file:
