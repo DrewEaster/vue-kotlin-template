@@ -1,6 +1,7 @@
 import auth0 from 'auth0-js'
 import Vue from 'vue'
 import auth0Config from './config/Auth0Config'
+import bus from '@/eventbus'
 
 let webAuth = new auth0.WebAuth({
   domain: auth0Config.domain(),
@@ -11,83 +12,60 @@ let webAuth = new auth0.WebAuth({
   scope: 'openid profile'
 })
 
-let auth = new Vue({
-  computed: {
-    token: {
-      get: function() {
-        return localStorage.getItem('id_token')
-      },
-      set: function(id_token) {
-        localStorage.setItem('id_token', id_token)
-      }
-    },
-    accessToken: {
-      get: function() {
-        return localStorage.getItem('access_token')
-      },
-      set: function(accessToken) {
-        localStorage.setItem('access_token', accessToken)
-      }
-    },
-    expiresAt: {
-      get: function() {
-        return localStorage.getItem('expires_at')
-      },
-      set: function(expiresIn) {
-        let expiresAt = JSON.stringify(expiresIn * 1000 + new Date().getTime())
-        localStorage.setItem('expires_at', expiresAt)
-      }
-    },
-    user: {
-      get: function() {
-        return JSON.parse(localStorage.getItem('user'))
-      },
-      set: function(user) {
-        localStorage.setItem('user', JSON.stringify(user))
-      }
-    }
+let auth = {
+  token() {
+    return localStorage.getItem('id_token')
   },
-  methods: {
-    login(redirectRouteName) {
-      if(redirectRouteName) {
-        localStorage.setItem('redirect_route_name', redirectRouteName)
-      }
-      webAuth.authorize()
-    },
-    logout() {
-      return new Promise((resolve, reject) => { 
-        localStorage.removeItem('access_token')
-        localStorage.removeItem('id_token')
-        localStorage.removeItem('expires_at')
-        localStorage.removeItem('user')
-        resolve()
-      })
-    },
-    isAuthenticated() {
-      return new Date().getTime() < this.expiresAt
-    },
-    handleAuthentication() {
-      return new Promise((resolve, reject) => {
-        
-        let redirectRouteName = localStorage.getItem('redirect_route_name')
-        localStorage.removeItem('redirect_route_name')
-        
-        webAuth.parseHash((err, authResult) => {
-          if (authResult && authResult.accessToken && authResult.idToken) {
-            this.expiresAt = authResult.expiresIn
-            this.accessToken = authResult.accessToken
-            this.token = authResult.idToken
-            this.user = authResult.idTokenPayload
-            resolve(redirectRouteName)
-          } else if (err) {
-            this.logout()
-            reject(err)
-          }
-        })
-      })
+  accessToken() {
+    return localStorage.getItem('access_token')
+  },
+  expiresAt() {
+    return localStorage.getItem('expires_at')
+  },
+  user() {
+    return JSON.parse(localStorage.getItem('user'))
+  },
+  login(redirectRouteName) {
+    if(redirectRouteName) {
+      localStorage.setItem('redirect_route_name', redirectRouteName)
     }
+    webAuth.authorize()
+  },
+  logout() {
+    return new Promise((resolve, reject) => { 
+      localStorage.removeItem('id_token')
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('expires_at')
+      localStorage.removeItem('user')
+      bus.$emit('authentication_state_changed', "logged_out");
+      resolve()
+    })
+  },
+  isAuthenticated() {
+    return new Date().getTime() < this.expiresAt()
+  },
+  handleAuthentication() {
+    return new Promise((resolve, reject) => {
+      
+      let redirectRouteName = localStorage.getItem('redirect_route_name')
+      localStorage.removeItem('redirect_route_name')
+      
+      webAuth.parseHash((err, authResult) => {
+        if (authResult && authResult.accessToken && authResult.idToken) {
+          localStorage.setItem('id_token', authResult.idToken)
+          localStorage.setItem('access_token', authResult.accessToken)
+          localStorage.setItem('expires_at', JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime()))
+          localStorage.setItem('user', authResult.idTokenPayload)
+          bus.$emit('authentication_state_changed', "logged_in");
+          resolve(redirectRouteName)
+        } else if (err) {
+          this.logout()
+          reject(err)
+        }
+      })
+    })
   }
-})
+}
 
 export default {
   install: function(Vue) {
