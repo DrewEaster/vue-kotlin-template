@@ -8,10 +8,11 @@
   },
   "dependencies": {
     "auth0-js": "^9.4.2",
+    "axios": "^0.18.0",
+    "bulma": "^0.6.2",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1",
-    "bulma": "^0.6.2"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.6",

@@ -20,3 +20,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.card {
+  width: 100%;
+  height: 100%;
+}
+</style>

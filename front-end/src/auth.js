@@ -2,6 +2,7 @@ import auth0 from 'auth0-js'
 import Vue from 'vue'
 import auth0Config from './config/Auth0Config'
 import bus from '@/eventbus'
+import axios from 'axios'
 
 let webAuth = new auth0.WebAuth({
   domain: auth0Config.domain(),
@@ -52,6 +53,7 @@ let auth = {
       
       webAuth.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
+          console.log(authResult.idToken)
           localStorage.setItem('id_token', authResult.idToken)
           localStorage.setItem('access_token', authResult.accessToken)
           localStorage.setItem('expires_at', JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime()))
@@ -69,6 +71,18 @@ let auth = {
 
 export default {
   install: function(Vue) {
+    
+    axios.interceptors.request.use(function(config) {
+      if (auth.isAuthenticated()) {
+        config.headers.Authorization = `Bearer ${auth.token()}`;
+      }
+      return config;
+    }, function(err) {
+      return Promise.reject(err);
+    });
+
+    // TODO: Intercept 401 errors in axios and redirect to login
+
     Vue.prototype.$auth = auth
   }
 }

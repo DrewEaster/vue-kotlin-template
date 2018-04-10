@@ -27,6 +27,9 @@ export default {
     albums () {
       return this.$store.state.publicAlbums
     }
+  },
+  created() {
+    this.$store.dispatch('fetchPublicAlbums')
   }
 }
 </script>
