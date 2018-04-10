@@ -28,64 +28,50 @@ class ApplicationRoutes @Inject constructor(
         application.configureJwtAuthentication(jwtConfig)
         application.routing {
 
-            route("/api/battles") {
+            route("/api/albums") {
 
                 get("public") {
 
                     call.respondJson(jsonArray(
                         jsonObject(
-                            "id" to 1111,
-                            "name" to "Startup NYC",
-                            "sponsor" to "Alec Pesola",
-                            "seedFund" to "500k"
+                            "id" to 1,
+                            "artist" to "Bruce Springsteen",
+                            "title" to "Born to Run"
                         ),
                         jsonObject(
-                            "id" to 1112,
-                            "name" to "Startup Ontario",
-                            "sponsor" to "Ryan Chenkie",
-                            "seedFund" to "750k"
+                            "id" to 2,
+                            "artist" to "Bob Dylan",
+                            "title" to "The Freewheelin' Bob Dylan"
                         ),
                         jsonObject(
-                            "id" to 1113,
-                            "name" to "Startup Uttah",
-                            "sponsor" to "Diego Poza",
-                            "seedFund" to "550k"
+                            "id" to 3,
+                            "artist" to "Whiskeytown",
+                            "title" to "Pneumonia"
                         ),
                         jsonObject(
-                            "id" to 1114,
-                            "name" to "Startup Australia",
-                            "sponsor" to "Eugene Kogan",
-                            "seedFund" to "500k"
+                            "id" to 4,
+                            "artist" to "Josh Ritter",
+                            "title" to "The Animal Years"
                         ),
                         jsonObject(
-                            "id" to 1115,
-                            "name" to "Startup Buenos Aires",
-                            "sponsor" to "Sebastian Peyrott",
-                            "seedFund" to "600k"
+                            "id" to 5,
+                            "artist" to "Ryan Adams",
+                            "title" to "Heartbreaker"
                         ),
                         jsonObject(
-                            "id" to 1116,
-                            "name" to "Startup Lagos",
-                            "sponsor" to "Prosper Otemuyiwa",
-                            "seedFund" to "650k"
+                            "id" to 6,
+                            "artist" to "Fleetwood Mac",
+                            "title" to "Rumours"
                         ),
                         jsonObject(
-                            "id" to 1117,
-                            "name" to "Startup Oslo",
-                            "sponsor" to "Mark Fish",
-                            "seedFund" to "600k"
+                            "id" to 7,
+                            "artist" to "Gram Parsons",
+                            "title" to "GP"
                         ),
                         jsonObject(
-                            "id" to 1118,
-                            "name" to "Startup Calabar",
-                            "sponsor" to "Christian Nwamba",
-                            "seedFund" to "800k"
-                        ),
-                        jsonObject(
-                            "id" to 1119,
-                            "name" to "Startup Nairobi",
-                            "sponsor" to "Aniedi Ubong",
-                            "seedFund" to "700k"
+                            "id" to 8,
+                            "artist" to "Bon Jovi",
+                            "title" to "These Days"
                         )
                     ))
                 }
@@ -96,58 +82,44 @@ class ApplicationRoutes @Inject constructor(
 
                         call.respondJson(jsonArray(
                             jsonObject(
-                                "id" to 2111,
-                                "name" to "Startup Seattle",
-                                "sponsor" to "Mark Zuckerberg",
-                                "seedFund" to "10M"
+                                "id" to 9,
+                                "artist" to "Spice Girls",
+                                "title" to "Spiceworld"
                             ),
                             jsonObject(
-                                "id" to 2112,
-                                "name" to "Startup Vegas",
-                                "sponsor" to "Bill Gates",
-                                "seedFund" to "20M"
+                                "id" to 10,
+                                "artist" to "Blue",
+                                "title" to "All Rise"
                             ),
                             jsonObject(
-                                "id" to 2113,
-                                "name" to "Startup Addis-Ababa",
-                                "sponsor" to "Aliko Dangote",
-                                "seedFund" to "8M"
+                                "id" to 11,
+                                "artist" to "S Club 7",
+                                "title" to "S Club"
                             ),
                             jsonObject(
-                                "id" to 2114,
-                                "name" to "Startup Abuja",
-                                "sponsor" to "Femi Otedola",
-                                "seedFund" to "5M"
+                                "id" to 12,
+                                "artist" to "Westlife",
+                                "title" to "Coast to Coast"
                             ),
                             jsonObject(
-                                "id" to 2115,
-                                "name" to "Startup Paris",
-                                "sponsor" to "Jeff Bezos",
-                                "seedFund" to "1.6M"
+                                "id" to 13,
+                                "artist" to "Five",
+                                "title" to "Invincible"
                             ),
                             jsonObject(
-                                "id" to 2116,
-                                "name" to "Startup London",
-                                "sponsor" to "Dave McClure",
-                                "seedFund" to "1M"
+                                "id" to 14,
+                                "artist" to "Backstreet Boys",
+                                "title" to "Backstreet's Back"
                             ),
                             jsonObject(
-                                "id" to 2117,
-                                "name" to "Startup Oslo",
-                                "sponsor" to "Paul Graham",
-                                "seedFund" to "2M"
+                                "id" to 15,
+                                "artist" to "Girls Aloud",
+                                "title" to "Sound of the Underground"
                             ),
                             jsonObject(
-                                "id" to 2118,
-                                "name" to "Startup Bangkok",
-                                "sponsor" to "Jeff Clavier",
-                                "seedFund" to "5M"
-                            ),
-                            jsonObject(
-                                "id" to 2119,
-                                "name" to "Startup Seoul",
-                                "sponsor" to "Paul Buchheit",
-                                "seedFund" to "4M"
+                                "id" to 16,
+                                "artist" to "One Direction",
+                                "title" to "Up All Night"
                             )
                         ))
                     }
