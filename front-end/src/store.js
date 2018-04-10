@@ -5,22 +5,33 @@ import apiConfig from './config/ApiConfig'
 
 Vue.use(Vuex)
 
-// TODO: Use spinner when loading from API
 export default new Vuex.Store({
   state: {
     publicAlbums:  [],
-    privateAlbums: []
+    privateAlbums: [],
+    loadingPublicAlbums: false,
+    loadingPrivateAlbums: false
   },
   mutations: {
+    setLoadingPublicAlbums(state, loading) {
+      state.loadingPublicAlbums = loading
+    },
+    setLoadingPrivateAlbums(state, loading) {
+      state.loadingPrivateAlbums = loading
+    },
     setPublicAlbums(state, albums) {
+      state.loadingPublicAlbums = false
       state.publicAlbums = albums
     },
     setPrivateAlbums(state, albums) {
+      state.loadingPrivateAlbums = false
       state.privateAlbums = albums
     }
   },
   actions: {
     fetchPublicAlbums(context) {
+      context.commit('setLoadingPublicAlbums', true)
+      
       axios.get(`${apiConfig.apiUriBase()}/api/albums/public`)
       .then(response => {
         context.commit('setPublicAlbums', response.data)
@@ -30,6 +41,7 @@ export default new Vuex.Store({
       })
     },
     fetchPrivateAlbums(context) {
+      context.commit('setLoadingPrivateAlbums', true)
       axios.get(`${apiConfig.apiUriBase()}/api/albums/private`)
       .then(response => {
         context.commit('setPrivateAlbums', response.data)
