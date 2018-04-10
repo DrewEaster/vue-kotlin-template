@@ -25,15 +25,8 @@ import bus from '@/eventbus'
 
 export default {
   name: 'nav-bar',
-  data() {
-    return {
-      isAuthenticated: this.$auth.isAuthenticated()
-    }
-  },
-  created() {
-    bus.$on('authentication_state_changed', () => {
-        this.isAuthenticated = this.$auth.isAuthenticated()
-    });
+  props: {
+    isAuthenticated: Boolean
   }
 }
 </script>

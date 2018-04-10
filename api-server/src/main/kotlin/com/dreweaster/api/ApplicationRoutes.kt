@@ -2,9 +2,7 @@ package com.dreweaster.api
 
 import com.dreweaster.api.config.CorsConfig
 import com.dreweaster.api.config.JwtConfig
-import com.dreweaster.api.util.CorsSupport
 import com.dreweaster.api.util.JsonSupport
-import com.dreweaster.api.util.JwtSupport
 import com.github.salomonbrys.kotson.jsonArray
 import com.github.salomonbrys.kotson.jsonObject
 import com.google.inject.Inject
@@ -17,10 +15,7 @@ import io.ktor.auth.*
 import io.ktor.routing.route
 
 @Singleton
-class ApplicationRoutes @Inject constructor(
-        application: Application,
-        corsConfig: CorsConfig,
-        jwtConfig: JwtConfig): JwtSupport, CorsSupport, JsonSupport {
+class ApplicationRoutes @Inject constructor(application: Application, corsConfig: CorsConfig, jwtConfig: JwtConfig): JsonSupport {
 
     init {
 

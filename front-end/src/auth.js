@@ -26,6 +26,9 @@ let auth = {
     if(redirectRouteName) {
       localStorage.setItem('redirect_route_name', redirectRouteName)
     }
+    
+    this.clearLocalStorage()
+
     webAuth.authorize({
       responseType: 'token id_token',
       redirectUri: auth0Config.redirectUri(),
@@ -35,13 +38,16 @@ let auth = {
   },
   logout() {
     return new Promise((resolve, reject) => { 
+      this.clearLocalStorage()
+      bus.$emit('authentication_event', "logged_out");
+      resolve()
+    })
+  },
+  clearLocalStorage() {
       localStorage.removeItem('id_token')
       localStorage.removeItem('access_token')
       localStorage.removeItem('expires_at')
       localStorage.removeItem('user')
-      bus.$emit('authentication_state_changed', "logged_out");
-      resolve()
-    })
   },
   isAuthenticated() {
     return new Date().getTime() < this.expiresAt()
@@ -54,12 +60,11 @@ let auth = {
       
       webAuth.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
-          console.log(authResult.idToken)
           localStorage.setItem('id_token', authResult.idToken)
           localStorage.setItem('access_token', authResult.accessToken)
           localStorage.setItem('expires_at', JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime()))
           localStorage.setItem('user', authResult.idTokenPayload)
-          bus.$emit('authentication_state_changed', "logged_in");
+          bus.$emit('authentication_event', "logged_in");
           resolve(redirectRouteName)
         } else if (err) {
           this.logout()
@@ -73,16 +78,22 @@ let auth = {
 export default {
   install: function(Vue) {
     
-    axios.interceptors.request.use(function(config) {
+    axios.interceptors.request.use((config) => {
       if (auth.isAuthenticated()) {
         config.headers.Authorization = `Bearer ${auth.accessToken()}`;
       }
       return config;
-    }, function(err) {
+    }, (err) => {
       return Promise.reject(err);
     });
 
-    // TODO: Intercept 401 errors in axios and redirect to login
+    axios.interceptors.response.use( (response) => { return response }, (error) => {
+      // TODO: If token expired then could refresh token and retry API request
+      if (error.response.status === 401 && error.config && !error.config.__isRetryRequest) {
+        bus.$emit('authentication_event', "api_authentication_failed");
+      }
+      return Promise.reject(error)
+    })
 
     Vue.prototype.$auth = auth
   }
