@@ -29,7 +29,7 @@ export default new Vuex.Store({
         console.log(e) // TODO: Return error to UI
       })
     },
-    fetchPrivateAlbums() {
+    fetchPrivateAlbums(context) {
       axios.get(`${apiConfig.apiUriBase()}/api/albums/private`)
       .then(response => {
         context.commit('setPrivateAlbums', response.data)

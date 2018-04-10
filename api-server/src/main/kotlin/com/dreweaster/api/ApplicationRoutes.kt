@@ -28,6 +28,23 @@ class ApplicationRoutes @Inject constructor(
         application.configureJwtAuthentication(jwtConfig)
         application.routing {
 
+            route("/api/battles") {
+
+                get("public") {
+                    call.respondJson(jsonArray(
+
+                    ))
+                }
+
+                authenticate {
+                    get("private") {
+                        call.respondJson(jsonArray(
+
+                        ))
+                    }
+                }
+            }
+
             route("/api/albums") {
 
                 get("public") {

@@ -13,7 +13,11 @@ class Auth0Config {
     }
 
     audience() {
-        return  window.config.auth0.audience
+        return window.config.auth0.audience
+    }
+
+    scope() {
+        return window.config.auth0.scope
     }
 }
 

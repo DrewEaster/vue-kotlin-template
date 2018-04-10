@@ -4,14 +4,10 @@ import auth0Config from './config/Auth0Config'
 import bus from '@/eventbus'
 import axios from 'axios'
 
-let webAuth = new auth0.WebAuth({
-  domain: auth0Config.domain(),
+var webAuth = new auth0.WebAuth({
   clientID: auth0Config.clientID(),
-  redirectUri: auth0Config.redirectUri(),
-  audience: auth0Config.audience(), 
-  responseType: 'token id_token',
-  scope: 'openid profile'
-})
+  domain: auth0Config.domain()
+});
 
 let auth = {
   token() {
@@ -30,7 +26,12 @@ let auth = {
     if(redirectRouteName) {
       localStorage.setItem('redirect_route_name', redirectRouteName)
     }
-    webAuth.authorize()
+    webAuth.authorize({
+      responseType: 'token id_token',
+      redirectUri: auth0Config.redirectUri(),
+      audience: auth0Config.audience(),
+      scope: auth0Config.scope()
+    })
   },
   logout() {
     return new Promise((resolve, reject) => { 
@@ -74,7 +75,7 @@ export default {
     
     axios.interceptors.request.use(function(config) {
       if (auth.isAuthenticated()) {
-        config.headers.Authorization = `Bearer ${auth.token()}`;
+        config.headers.Authorization = `Bearer ${auth.accessToken()}`;
       }
       return config;
     }, function(err) {
